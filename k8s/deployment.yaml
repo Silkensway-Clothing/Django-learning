@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: django-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: django-test
+  template:
+    metadata:
+      labels:
+        app: django-test
+    spec:
+      containers:
+        - name: django
+          image: image_name
+          ports:
+            - containerPort: 8000
+              volumeMounts:
+              - name: sqlite-data
+                mountPath: /app/db.sqlite3
+                subPath: db.sqlite3
+          volumes:
+            - name: sqlite-data
+              persistentVolumeClaim:
+                claimName: sqlite-pvc
